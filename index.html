@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Toast Notifications</title>
+  <style>
+    @keyframes borderGrow {
+      from {
+        width: 0%;
+      }
+      to {
+        width: 100%;
+      }
+    }
+
+    .toast {
+      display: none;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .toast .toast-timer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 4px;
+      background: currentColor;
+      animation: borderGrow 3s linear forwards;
+    }
+
+    .icon-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 9999px;
+    }
+
+    .toast-timing {
+      font-size: 0.75rem;
+      color: gray;
+      margin-left: 8px;
+    }
+  </style>
+</head>
+<body class="bg-gray-800 flex flex-col items-center justify-center min-h-screen space-y-6">
+  <div id="toast-success" class="toast flex items-center justify-between p-4 bg-white rounded-md shadow-md w-11/12 sm:w-96 text-green-500 border-l-4 border-green-500">
+    <div class="flex items-center">
+      <div class="icon-container bg-green-500 text-white mr-2">
+        <span class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-5">
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+          </span>
+      </div>
+      <p class="text-gray-800 font-semibold">Success: This is a success toast.</p>
+      <span class="toast-timing" id="toast-success-timing">3s</span>
+    </div>
+    <button class="text-gray-800 font-bold" onclick="hideToast('toast-success')">✖</button>
+    <div class="toast-timer"></div>
+  </div>
+
+  <div id="toast-error" class="toast flex items-center justify-between p-4 bg-white rounded-md shadow-md w-11/12 sm:w-96 text-red-500 border-l-4 border-red-500">
+    <div class="flex items-center">
+      <div class="icon-container bg-red-500 text-white mr-2">
+        <span class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+          </span>
+      </div>
+      <p class="text-gray-800 font-semibold">Error: This is an error toast.</p>
+      <span class="toast-timing" id="toast-error-timing">3s</span>
+    </div>
+    <button class="text-gray-800 font-bold" onclick="hideToast('toast-error')">✖</button>
+    <div class="toast-timer"></div>
+  </div>
+
+  <div id="toast-warning" class="toast flex items-center justify-between p-4 bg-white rounded-md shadow-md w-11/12 sm:w-96 text-yellow-500 border-l-4 border-yellow-500">
+    <div class="flex items-center">
+      <div class="icon-container bg-yellow-500 text-white mr-2">
+        <span class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-6">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3l-8.47-14.14a2 2 0 0 0-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          </span>
+      </div>
+      <p class="text-gray-800 font-semibold">Warning: This is a warning toast.</p>
+      <span class="toast-timing" id="toast-warning-timing">3s</span>
+    </div>
+    <button class="text-gray-800 font-bold" onclick="hideToast('toast-warning')">✖</button>
+    <div class="toast-timer"></div>
+  </div>
+
+  <div id="toast-info" class="toast flex items-center justify-between p-4 bg-white rounded-md shadow-md w-11/12 sm:w-96 text-blue-500 border-l-4 border-blue-500">
+    <div class="flex items-center">
+      <div class="icon-container bg-blue-500 text-white mr-2">
+        <span class="font-bold font-serif">i</span>
+      </div>
+      <p class="text-gray-800 font-semibold">Info: This is an information toast.</p>
+      <span class="toast-timing" id="toast-info-timing">3s</span>
+    </div>
+    <button class="text-gray-800 font-bold" onclick="hideToast('toast-info')">✖</button>
+    <div class="toast-timer"></div>
+  </div>
+
+  <div class="absolute bottom-6 w-full px-4 space-x-4 flex justify-center">
+    <button id="btn-success" class="px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600 w-1/4 sm:w-auto">Show Success</button>
+    <button id="btn-error" class="px-4 py-2 bg-red-500 text-white rounded shadow hover:bg-red-600 w-1/4 sm:w-auto">Show Error</button>
+    <button id="btn-warning" class="px-4 py-2 bg-yellow-500 text-white rounded shadow hover:bg-yellow-600 w-1/4 sm:w-auto">Show Warning</button>
+    <button id="btn-info" class="px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 w-1/4 sm:w-auto">Show Info</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
