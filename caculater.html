@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comfortable Classic Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #eaeaea;
+    }
+
+    .btn {
+      font-size: 1.4rem;
+      font-weight: bold;
+      padding: 15px;
+      border: 2px solid #bbb;
+      background-color: #f9f9f9;
+      transition: all 0.2s;
+      border-radius: 8px;
+    }
+
+    .btn:hover {
+      background-color: #ddd;
+    }
+
+    .btn.operator {
+      background-color: #f4d35e;
+      border-color: #e4c254;
+    }
+
+    .btn.operator:hover {
+      background-color: #f0c840;
+    }
+
+    .btn.clear {
+      background-color: #ff6b6b;
+      border-color: #e15b5b;
+      color: white;
+    }
+
+    .btn.clear:hover {
+      background-color: #e14545;
+    }
+
+    .btn.equals {
+      background-color: #6bcf63;
+      border-color: #5ebf59;
+      color: white;
+    }
+
+    .btn.equals:hover {
+      background-color: #59b74f;
+    }
+
+    #result {
+      font-size: 2.5rem;
+      padding: 20px;
+      text-align: right;
+      background-color: #f9f9f9;
+      border: 2px solid #bbb;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      box-shadow: inset 1px 1px 4px #ddd;
+    }
+
+    #preview {
+      font-size: 1.2rem;
+      text-align: right;
+      color: gray;
+      padding: 10px 20px;
+      margin-bottom: 20px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center h-screen">
+  <div class="bg-white border border-gray-300 rounded-lg p-6 shadow-md w-full max-w-md">
+    <!-- Main Display -->
+    <div id="result">0</div>
+
+    <!-- Preview Display -->
+    <div id="preview">"</div>
+
+    <!-- Buttons -->
+    <div class="grid grid-cols-4 gap-3 mt-4">
+      <button class="btn">7</button>
+      <button class="btn">8</button>
+      <button class="btn">9</button>
+      <button class="btn operator">/</button>
+
+      <button class="btn">4</button>
+      <button class="btn">5</button>
+      <button class="btn">6</button>
+      <button class="btn operator">*</button>
+
+      <button class="btn">1</button>
+      <button class="btn">2</button>
+      <button class="btn">3</button>
+      <button class="btn operator">-</button>
+
+      <button class="btn">0</button>
+      <button class="btn">.</button>
+      <button class="btn clear" id="clear">C</button>
+      <button class="btn operator">+</button>
+
+      <button class="btn equals col-span-4" id="equals">=</button>
+    </div>
+  </div>
+
+  <script>
+    const result = document.getElementById("result");
+    const preview = document.getElementById("preview");
+    let currentInput = "";
+    let operator = null;
+    let firstOperand = null;
+
+    // Handle button clicks
+    document.querySelectorAll(".btn").forEach(button => {
+      button.addEventListener("click", () => {
+        const value = button.innerText;
+
+        // Handle numbers and decimal
+        if (!isNaN(value) || value === ".") {
+          currentInput += value;
+          result.innerText = currentInput || "0";
+        } else if (["+", "-", "*", "/"].includes(value)) {
+          // Handle operators
+          if (currentInput) {
+            firstOperand = parseFloat(currentInput);
+            operator = value;
+            currentInput = "";
+          }
+        }
+
+        // Update preview display with partial calculation
+        if (firstOperand !== null && currentInput) {
+          const secondOperand = parseFloat(currentInput);
+          let partialResult = 0;
+
+          switch (operator) {
+            case "+":
+              partialResult = firstOperand + secondOperand;
+              break;
+            case "-":
+              partialResult = firstOperand - secondOperand;
+              break;
+            case "*":
+              partialResult = firstOperand * secondOperand;
+              break;
+            case "/":
+              partialResult = secondOperand !== 0 ? firstOperand / secondOperand : "Error";
+              break;
+          }
+
+          preview.innerText = `${firstOperand} ${operator} ${secondOperand} = ${partialResult}`;
+        } else if (operator && firstOperand !== null) {
+          preview.innerText = `${firstOperand} ${operator}`;
+        } else {
+          preview.innerText = "Enter a calculation...";
+        }
+      });
+    });
+
+    // Handle equals button
+    document.getElementById("equals").addEventListener("click", () => {
+      if (operator && firstOperand !== null && currentInput) {
+        const secondOperand = parseFloat(currentInput);
+        let calculation = 0;
+
+        switch (operator) {
+          case "+":
+            calculation = firstOperand + secondOperand;
+            break;
+          case "-":
+            calculation = firstOperand - secondOperand;
+            break;
+          case "*":
+            calculation = firstOperand * secondOperand;
+            break;
+          case "/":
+            calculation = secondOperand !== 0 ? firstOperand / secondOperand : "Error";
+            break;
+        }
+
+        result.innerText = calculation;
+        preview.innerText = "Enter a calculation...";
+        currentInput = calculation.toString();
+        firstOperand = null;
+        operator = null;
+      }
+    });
+
+    // Handle clear button
+    document.getElementById("clear").addEventListener("click", () => {
+      currentInput = "";
+      firstOperand = null;
+      operator = null;
+      result.innerText = "0";
+      preview.innerText = "Enter a calculation...";
+    });
+  </script>
+</body>
+</html>
