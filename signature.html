@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Signature Pad</title>
+   <link rel="stylesheet" href="signature.css"/>
+</head>
+<body>
+    <div class="signature-wrapper">
+        <div class="signature-header">
+            <h1>Digital Signature</h1>
+            <p>Use your mouse or touch to sign below</p>
+        </div>
+
+        <div class="signature-pad-container">
+            <canvas id="signaturePad"></canvas>
+        </div>
+
+        <div class="button-container">
+            <button id="saveButton">Save Signature</button>
+            <button id="clearButton" class="clear">Clear</button>
+        </div>
+
+        <div id="status" class="status"></div>
+
+        <div class="signature-info">
+            <div id="userInfo"></div>
+            <div id="dateInfo"></div>
+        </div>
+    </div>
+
+    <script src="signature.js"></script>
+</div>
+</body>
+</html>
